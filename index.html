@@ -12,12 +12,13 @@
 
     <header class="container">
       <br />
-      <input
-        id="addTodoTextInput"
-        placeholder="What needs to be done?"
-        type="text"
-        onkeypress="handleKeyPress(event)"
-      />
+      <form autocomplete="off" onsubmit="onSubmit(event)">
+        <input
+          id="addTodoTextInput"
+          placeholder="What needs to be done?"
+          type="text"
+        />
+      </form>
     </header>
 
     <ul></ul>
