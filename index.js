@@ -2,7 +2,7 @@ let todoList = {
   todos: [],
   addTodo(todoText) {
     this.todos.push({
-      todoText: todoText,
+      todoText,
       completed: false
     });
   },
@@ -39,18 +39,18 @@ let todoList = {
   }
 };
 
-function handleKeyPress(e) {
-  const key = e.key;
-  if (key === 'Enter' && addTodoTextInput.value.trim().length > 0) {
+const addTodoTextInput = document.getElementById('addTodoTextInput');
+
+onSubmit = e => {
+  e.preventDefault();
+  if (addTodoTextInput.value.trim().length > 0) {
     eventHandlers.addTodo();
   }
-}
-
-const addTodoTextInput = document.getElementById('addTodoTextInput');
+};
 
 const eventHandlers = {
   addTodo() {
-    todoList.addTodo(addTodoTextInput.value);
+    todoList.addTodo(addTodoTextInput.value.trim());
     addTodoTextInput.value = '';
     view.displayTodos();
   },
@@ -75,14 +75,12 @@ let view = {
     todoUL.className = 'view';
     todoList.todos.forEach((todo, position) => {
       let todoLi = document.createElement('li');
-      todoLi.className = 'round';
       let todoTextWithCompletion = '';
       let toggleBtn = this.createToggleButton();
       if (todo.completed === true) {
         toggleBtn.checked = true;
         todoLi.style.textDecoration = 'line-through';
         todoLi.style.color = 'rgb(182, 182, 182)';
-        console.log(todoLi.style.textDecoration);
         todoTextWithCompletion = todo.todoText;
       } else if (todo.completed === false) {
         toggleBtn.checked = false;
@@ -95,29 +93,29 @@ let view = {
       todoUL.appendChild(todoLi);
     }, this);
   },
-  createDeleteButton() {
+  createDeleteButton = () => {
     let deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'X';
     deleteBtn.className = 'deleteBtn';
     return deleteBtn;
   },
-  createToggleButton() {
+  createToggleButton = () => {
     let toggleBtn = document.createElement('input');
     toggleBtn.type = 'checkbox';
     toggleBtn.className = 'toggleBtn';
     toggleBtn.id = 'checkbox';
     return toggleBtn;
   },
-  setUpEventListeners() {
+  setUpEventListeners = () => {
     let todoUL = document.querySelector('ul');
     todoUL.addEventListener('click', event => {
       const elementClicked = event.target;
+      const { id } = elementClicked.parentNode;
       if (elementClicked.className === 'deleteBtn') {
-        eventHandlers.deleteTodo(parseInt(elementClicked.parentNode.id));
-        console.log(elementClicked.parentNode);
+        eventHandlers.deleteTodo(parseInt(id));
       }
       if (elementClicked.className === 'toggleBtn') {
-        eventHandlers.toggleCompleted(parseInt(elementClicked.parentNode.id));
+        eventHandlers.toggleCompleted(parseInt(id));
       }
     });
   }
